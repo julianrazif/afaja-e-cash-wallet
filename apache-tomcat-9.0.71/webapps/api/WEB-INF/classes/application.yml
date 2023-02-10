@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: "afaja e-cash wallet api"
+
+server:
+  port: 9090
+  servlet:
+    context-path: "/api"
