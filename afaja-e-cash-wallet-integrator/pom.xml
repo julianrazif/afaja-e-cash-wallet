@@ -16,17 +16,37 @@
     <artifactId>afaja-e-cash-wallet-integrator</artifactId>
 
     <dependencies>
+        <!-- local -->
+        <dependency>
+            <groupId>com.julianraziffigaro</groupId>
+            <artifactId>afaja-e-cash-wallet-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.julianraziffigaro</groupId>
+            <artifactId>afaja-e-cash-wallet-va</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.julianraziffigaro</groupId>
+            <artifactId>afaja-e-cash-wallet-va-reactive</artifactId>
+        </dependency>
+
+        <!-- spring boot starter webflux-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot</artifactId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
+
+        <!-- spring boot starter jasypt -->
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
+            <groupId>com.github.ulisesbocchio</groupId>
+            <artifactId>jasypt-spring-boot-starter</artifactId>
         </dependency>
+
+        <!-- spring boot starter test -->
         <dependency>
-            <groupId>jakarta.annotation</groupId>
-            <artifactId>jakarta.annotation-api</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -39,6 +59,18 @@
                 <configuration>
                     <target>${maven.compiler.target}</target>
                     <source>${maven.compiler.source}</source>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
                 </configuration>
             </plugin>
         </plugins>
