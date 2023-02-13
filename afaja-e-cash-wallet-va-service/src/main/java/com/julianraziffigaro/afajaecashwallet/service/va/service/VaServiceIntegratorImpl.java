@@ -4,6 +4,7 @@ import com.julianraziffigaro.afajaecashwallet.core.domain.VaDomain;
 import com.julianraziffigaro.afajaecashwallet.core.model.VaDetails;
 import com.julianraziffigaro.afajaecashwallet.core.service.VaServiceReactive;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -17,5 +18,9 @@ public class VaServiceIntegratorImpl {
 
   public Mono<VaDetails> inquiryVaUserReactive(VaDomain vaDomain) {
     return vaServiceReactive.inquiry(vaDomain);
+  }
+
+  public Flux<VaDetails> allVaUserByParentReactive(VaDomain vaDomain) {
+    return vaServiceReactive.allByParent(vaDomain);
   }
 }
