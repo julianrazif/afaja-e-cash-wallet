@@ -15,6 +15,7 @@ public class VaServiceRouter {
   public RouterFunction<ServerResponse> vaServiceReactiveRoute(VaServiceReactiveHandler vaServiceReactiveHandler) {
     return RouterFunctions
       .route(RequestPredicates.POST("/vaUserReactive/inquiry"), vaServiceReactiveHandler::inquiryVaUser)
-      .andRoute(RequestPredicates.POST("/vaUserReactive/byParent"), vaServiceReactiveHandler::allVaUserByParent);
+      .andRoute(RequestPredicates.POST("/vaUserReactive/byParent"), vaServiceReactiveHandler::allVaUserByParent)
+      .andRoute(RequestPredicates.POST("/vaUserReactive/createVaUser"), vaServiceReactiveHandler::createVaUser);
   }
 }

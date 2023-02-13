@@ -23,4 +23,8 @@ public class VaServiceIntegratorImpl {
   public Flux<VaDetails> allVaUserByParentReactive(VaDomain vaDomain) {
     return vaServiceReactive.allByParent(vaDomain);
   }
+
+  public Mono<VaDetails> createVaUser(VaDomain vaDomain) {
+    return vaServiceReactive.save(vaDomain);
+  }
 }

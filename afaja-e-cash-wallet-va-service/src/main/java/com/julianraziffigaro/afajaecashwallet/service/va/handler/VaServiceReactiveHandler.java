@@ -42,6 +42,18 @@ public class VaServiceReactiveHandler {
       .body(BodyInserters.fromPublisher(vaDetailsFlux, VaDomain.class));
   }
 
+  public Mono<ServerResponse> createVaUser(ServerRequest request) {
+    Mono<VaDetails> sources = request
+      .bodyToMono(VaDomain.class)
+      .flatMap(vaServiceIntegrator::createVaUser);
+
+    Mono<VaDomain> vaDetailsMono = vaDetailsToDomain(sources);
+
+    return ServerResponse
+      .ok()
+      .body(BodyInserters.fromPublisher(vaDetailsMono, VaDomain.class));
+  }
+
   private Mono<VaDomain> vaDetailsToDomain(Mono<VaDetails> sources) {
     return sources
       .map(vaDetails -> {

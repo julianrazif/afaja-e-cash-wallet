@@ -26,7 +26,7 @@ public class VaServiceReactiveImpl implements VaServiceReactive {
       vaDomain.getPhoneNumber(),
       vaDomain.getCurrentBalance(),
       vaDomain.getHashedCode()
-    ).singleOrEmpty();
+    );
   }
 
   @Override

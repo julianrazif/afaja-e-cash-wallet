@@ -9,6 +9,7 @@ import org.springframework.data.relational.core.query.Criteria;
 import org.springframework.data.relational.core.query.Query;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
 
@@ -53,7 +54,25 @@ public class VaRepositoryReactiveImpl implements VaRepositoryReactive {
   }
 
   @Override
-  public Flux<VaDetails> save(String vaNumber, String parentVa, String realName, String phoneNumber, BigDecimal currentBalance, String hashedCode) {
-    return null;
+  public Mono<VaDetails> save(String vaNumber, String parentVa, String realName, String phoneNumber, BigDecimal currentBalance, String hashedCode) {
+    Mono<String> vaNumberMono = r2dbcEntityTemplate
+      .getDatabaseClient()
+      .sql(""
+        + "INSERT INTO va (va_number, parent_va, real_name, phone_number, current_balance, hashed_code) "
+        + "VALUES (:vaNumber, :parentVa, :realName, :phoneNumber, :currentBalance, :hashedCode)"
+        + ""
+      )
+      .filter((statement, next) -> statement.returnGeneratedValues("va_number").execute())
+      .bind("vaNumber", vaNumber)
+      .bind("parentVa", parentVa)
+      .bind("realName", realName)
+      .bind("phoneNumber", phoneNumber)
+      .bind("currentBalance", currentBalance)
+      .bind("hashedCode", hashedCode)
+      .fetch()
+      .first()
+      .map(stringObjectMap -> stringObjectMap.get("va_number").toString());
+
+     return vaNumberMono.flatMap(s -> findByVaNumber(s).singleOrEmpty());
   }
 }
