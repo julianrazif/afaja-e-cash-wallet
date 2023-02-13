@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: "va-service"
+
+  r2dbc:
+    url: ENC(RxFfj/EcGShd0JK8M3Hp3GddoEC2o4SXw65EmlJKHgMFdDH4HoTRxR/wWodjWfwazu8u+obMIP70BuEknP/Q3WVZDOEKgr9BDLi214JrILM=)
+    username: ENC(1rsdN2jEHksVxRK7Ulq9qbyfERzThdkYy4jRLRkKvdbUT9Q+h4jXK2PHdvwMn93E)
+    password: ENC(lM2MWKtxnxGLcl/YDOXKnOZGqoJTiUQZwgxwzY1piNxd9rjxfJ/XkQX9TzmkejxY)
+    properties:
+      schema: ENC(qMtS4Qja2E9JiSeGMI2QrrEN2R4Ryes3k9xtvNSt3YoQDjBnTJeg6eLgiCszy36Q)
+    pool:
+      enabled: true
+      max-idle-time: 30m
+      max-size: 40
+      initial-size: 20
+
+jasypt:
+  encryptor:
+    password: ${JASYPT_ENCRYPTOR_PASSWORD}
+
+server:
+  port: 9092
