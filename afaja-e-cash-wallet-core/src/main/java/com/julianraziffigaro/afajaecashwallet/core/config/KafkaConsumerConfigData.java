@@ -16,5 +16,6 @@ public class KafkaConsumerConfigData {
   private String valueDeserializer;
   private String autoOffsetReset;
   private String transactionVaTopic;
+  private String vaTransactionTopic;
   private String clientCode;
 }

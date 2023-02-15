@@ -15,4 +15,5 @@ public class KafkaProducerConfigData {
   private String valueSerializer;
   private String acks;
   private String vaTransactionTopic;
+  private String transactionVaTopic;
 }
