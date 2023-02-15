@@ -1,6 +1,9 @@
 package com.julianraziffigaro.afajaecashwallet.reactive.va.service;
 
+import com.julianraziffigaro.afajaecashwallet.core.domain.TransactionDomain;
 import com.julianraziffigaro.afajaecashwallet.core.domain.VaDomain;
+import com.julianraziffigaro.afajaecashwallet.core.model.TransactionType;
+import com.julianraziffigaro.afajaecashwallet.core.model.Va;
 import com.julianraziffigaro.afajaecashwallet.core.model.VaDetails;
 import com.julianraziffigaro.afajaecashwallet.core.service.VaServiceReactive;
 import com.julianraziffigaro.afajaecashwallet.reactive.va.repository.VaRepositoryReactiveImpl;
@@ -19,14 +22,38 @@ public class VaServiceReactiveImpl implements VaServiceReactive {
 
   @Override
   public Mono<VaDetails> save(VaDomain vaDomain) {
-    return this.vaRepository.save(
-      vaDomain.getVaNumber(),
-      vaDomain.getParentVa(),
-      vaDomain.getRealName(),
-      vaDomain.getPhoneNumber(),
-      vaDomain.getCurrentBalance(),
-      vaDomain.getHashedCode()
-    );
+    return inquiry(vaDomain)
+      .switchIfEmpty(
+        this.vaRepository
+          .save(
+            vaDomain.getVaNumber(),
+            vaDomain.getParentVa(),
+            vaDomain.getRealName(),
+            vaDomain.getPhoneNumber(),
+            vaDomain.getCurrentBalance(),
+            vaDomain.getHashedCode()
+          )
+          .flatMap(vaNumber -> this.vaRepository.findByVaNumber(vaNumber).singleOrEmpty())
+      )
+      .flatMap(vaDetails -> Mono.empty());
+  }
+
+  @Override
+  public Mono<VaDetails> debitCredit(TransactionDomain transactionDomain) {
+    return inquiry(transactionDomain.getIssuedBy())
+      .switchIfEmpty(Mono.empty())
+      .flatMap(vaDetails -> {
+        VaDetails va;
+        if (transactionDomain.getTransactionType().equals(TransactionType.DEBIT)) {
+          va = Va.withVaDetails(vaDetails).withDebit(transactionDomain.getAmount()).build();
+        } else if (transactionDomain.getTransactionType().equals(TransactionType.CREDIT)) {
+          va = Va.withVaDetails(vaDetails).withCredit(transactionDomain.getAmount()).build();
+        } else {
+          return Mono.empty();
+        }
+        return this.vaRepository.debitCredit(va.getVaNumber(), va.getCurrentBalance());
+      })
+      .flatMap(vaNumber -> this.vaRepository.findByVaNumber(vaNumber).singleOrEmpty());
   }
 
   @Override

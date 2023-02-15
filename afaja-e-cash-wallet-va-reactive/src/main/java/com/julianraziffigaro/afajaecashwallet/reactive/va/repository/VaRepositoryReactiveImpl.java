@@ -54,8 +54,8 @@ public class VaRepositoryReactiveImpl implements VaRepositoryReactive {
   }
 
   @Override
-  public Mono<VaDetails> save(String vaNumber, String parentVa, String realName, String phoneNumber, BigDecimal currentBalance, String hashedCode) {
-    Mono<String> vaNumberMono = r2dbcEntityTemplate
+  public Mono<String> save(String vaNumber, String parentVa, String realName, String phoneNumber, BigDecimal currentBalance, String hashedCode) {
+    return r2dbcEntityTemplate
       .getDatabaseClient()
       .sql(""
         + "INSERT INTO va (va_number, parent_va, real_name, phone_number, current_balance, hashed_code) "
@@ -72,7 +72,21 @@ public class VaRepositoryReactiveImpl implements VaRepositoryReactive {
       .fetch()
       .first()
       .map(stringObjectMap -> stringObjectMap.get("va_number").toString());
+  }
 
-     return vaNumberMono.flatMap(s -> findByVaNumber(s).singleOrEmpty());
+  @Override
+  public Mono<String> debitCredit(String vaNumber, BigDecimal amount) {
+    return r2dbcEntityTemplate
+      .getDatabaseClient()
+      .sql(""
+        + "UPDATE va SET current_balance = :currentBalance WHERE va_number = :vaNumber"
+        + ""
+      )
+      .filter((statement, next) -> statement.returnGeneratedValues("va_number").execute())
+      .bind("currentBalance", amount)
+      .bind("vaNumber", vaNumber)
+      .fetch()
+      .first()
+      .map(stringObjectMap -> stringObjectMap.get("va_number").toString());
   }
 }

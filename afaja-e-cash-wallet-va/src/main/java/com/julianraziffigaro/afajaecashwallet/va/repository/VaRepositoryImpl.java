@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 @Repository
@@ -80,8 +81,8 @@ public class VaRepositoryImpl implements VaRepository {
   }
 
   @Override
-  public Stream<VaDetails> save(String vaNumber, String parentVa, String realName, String phoneNumber,
-                                BigDecimal currentBalance, String hashedCode) {
+  public Optional<String> save(String vaNumber, String parentVa, String realName, String phoneNumber,
+                       BigDecimal currentBalance, String hashedCode) {
 
     KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -101,8 +102,24 @@ public class VaRepositoryImpl implements VaRepository {
       return ps;
     }, keyHolder);
 
-    String key = (String) keyHolder.getKeyList().get(0).get("va_number");
+    return Optional.of(keyHolder.getKeyList().get(0).get("va_number").toString());
+  }
 
-    return findByVaNumber(key);
+  @Override
+  public Optional<String> debitCredit(String vaNumber, BigDecimal amount) {
+    KeyHolder keyHolder = new GeneratedKeyHolder();
+
+    jdbcTemplate.update(con -> {
+      PreparedStatement ps = con.prepareStatement(""
+          + "UPDATE va SET current_balance = ? WHERE va_number = ?"
+          + "",
+        Statement.RETURN_GENERATED_KEYS
+      );
+      ps.setBigDecimal(1, amount);
+      ps.setString(2, vaNumber);
+      return ps;
+    }, keyHolder);
+
+    return Optional.of(keyHolder.getKeyList().get(0).get("va_number").toString());
   }
 }
