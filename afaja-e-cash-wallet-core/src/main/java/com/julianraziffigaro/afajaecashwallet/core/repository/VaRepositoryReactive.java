@@ -14,6 +14,8 @@ public interface VaRepositoryReactive {
 
   Flux<VaDetails> findByPhoneNumber(String phoneNumber);
 
-  Mono<VaDetails> save(String vaNumber, String parentVa, String realName, String phoneNumber,
+  Mono<String> save(String vaNumber, String parentVa, String realName, String phoneNumber,
                     BigDecimal currentBalance, String hashedCode);
+
+  Mono<String> debitCredit(String vaNumber, BigDecimal amount);
 }
