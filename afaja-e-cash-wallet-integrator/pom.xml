@@ -29,6 +29,10 @@
             <groupId>com.julianraziffigaro</groupId>
             <artifactId>afaja-e-cash-wallet-va-reactive</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.julianraziffigaro</groupId>
+            <artifactId>afaja-e-cash-wallet-va-kafka</artifactId>
+        </dependency>
 
         <!-- spring boot starter webflux-->
         <dependency>
@@ -47,6 +51,16 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <!-- monitoring -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
     </dependencies>
 
