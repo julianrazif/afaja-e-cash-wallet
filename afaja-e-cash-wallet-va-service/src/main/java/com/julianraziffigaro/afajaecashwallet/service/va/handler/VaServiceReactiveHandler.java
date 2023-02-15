@@ -1,5 +1,6 @@
 package com.julianraziffigaro.afajaecashwallet.service.va.handler;
 
+import com.julianraziffigaro.afajaecashwallet.core.domain.TransactionDomain;
 import com.julianraziffigaro.afajaecashwallet.core.domain.VaDomain;
 import com.julianraziffigaro.afajaecashwallet.core.model.VaDetails;
 import com.julianraziffigaro.afajaecashwallet.service.va.service.VaServiceIntegratorImpl;
@@ -46,6 +47,18 @@ public class VaServiceReactiveHandler {
     Mono<VaDetails> sources = request
       .bodyToMono(VaDomain.class)
       .flatMap(vaServiceIntegrator::createVaUser);
+
+    Mono<VaDomain> vaDetailsMono = vaDetailsToDomain(sources);
+
+    return ServerResponse
+      .ok()
+      .body(BodyInserters.fromPublisher(vaDetailsMono, VaDomain.class));
+  }
+
+  public Mono<ServerResponse> debitCredit(ServerRequest request) {
+    Mono<VaDetails> sources = request
+      .bodyToMono(TransactionDomain.class)
+      .flatMap(vaServiceIntegrator::debitCredit);
 
     Mono<VaDomain> vaDetailsMono = vaDetailsToDomain(sources);
 

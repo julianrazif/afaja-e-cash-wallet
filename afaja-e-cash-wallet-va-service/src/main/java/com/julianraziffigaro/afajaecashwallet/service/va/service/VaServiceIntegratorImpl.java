@@ -1,5 +1,6 @@
 package com.julianraziffigaro.afajaecashwallet.service.va.service;
 
+import com.julianraziffigaro.afajaecashwallet.core.domain.TransactionDomain;
 import com.julianraziffigaro.afajaecashwallet.core.domain.VaDomain;
 import com.julianraziffigaro.afajaecashwallet.core.model.VaDetails;
 import com.julianraziffigaro.afajaecashwallet.core.service.VaServiceReactive;
@@ -17,14 +18,18 @@ public class VaServiceIntegratorImpl {
   }
 
   public Mono<VaDetails> inquiryVaUserReactive(VaDomain vaDomain) {
-    return vaServiceReactive.inquiry(vaDomain);
+    return this.vaServiceReactive.inquiry(vaDomain);
   }
 
   public Flux<VaDetails> allVaUserByParentReactive(VaDomain vaDomain) {
-    return vaServiceReactive.allByParent(vaDomain);
+    return this.vaServiceReactive.allByParent(vaDomain);
   }
 
   public Mono<VaDetails> createVaUser(VaDomain vaDomain) {
-    return vaServiceReactive.save(vaDomain);
+    return this.vaServiceReactive.save(vaDomain);
+  }
+
+  public Mono<VaDetails> debitCredit(TransactionDomain transactionDomain) {
+    return this.vaServiceReactive.debitCredit(transactionDomain);
   }
 }

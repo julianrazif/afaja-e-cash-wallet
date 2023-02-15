@@ -14,6 +14,31 @@ spring:
       max-size: 40
       initial-size: 20
 
+  # kafka admin config
+  kafka:
+    admin:
+      properties:
+        bootstrap.servers: 10.197.50.78:19092
+
+kafka-consumer-config:
+  bootstrap-servers: 10.197.50.78:19092
+  key-deserializer: org.apache.kafka.common.serialization.LongDeserializer
+  value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  client-id: "afaja-e-cash-wallet-va-servive-consumer"
+  group-id: "afaja-e-cash-wallet-va-servive"
+  auto-offset-reset: "latest"
+  transaction-va-topic: "transaction-va"
+  va-transaction-topic: "va-transaction"
+  client-code: "afaja-e-cash-wallet"
+kafka-producer-config:
+  bootstrap-servers: 10.197.50.78:19092
+  key-serializer: org.apache.kafka.common.serialization.LongSerializer
+  value-serializer: org.apache.kafka.common.serialization.StringSerializer
+  client-id: "afaja-e-cash-wallet-va-servive-producer"
+  va-transaction-topic: "va-transaction"
+  transaction-va-topic: "transaction-va"
+  acks: "all"
+
 jasypt:
   encryptor:
     password: ${JASYPT_ENCRYPTOR_PASSWORD}
