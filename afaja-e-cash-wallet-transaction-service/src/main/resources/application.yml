@@ -1,0 +1,47 @@
+spring:
+  application:
+    name: "transaction-service"
+
+  r2dbc:
+    url: ENC(RxFfj/EcGShd0JK8M3Hp3GddoEC2o4SXw65EmlJKHgMFdDH4HoTRxR/wWodjWfwazu8u+obMIP70BuEknP/Q3WVZDOEKgr9BDLi214JrILM=)
+    username: ENC(1rsdN2jEHksVxRK7Ulq9qbyfERzThdkYy4jRLRkKvdbUT9Q+h4jXK2PHdvwMn93E)
+    password: ENC(lM2MWKtxnxGLcl/YDOXKnOZGqoJTiUQZwgxwzY1piNxd9rjxfJ/XkQX9TzmkejxY)
+    properties:
+      schema: ENC(qMtS4Qja2E9JiSeGMI2QrrEN2R4Ryes3k9xtvNSt3YoQDjBnTJeg6eLgiCszy36Q)
+    pool:
+      enabled: true
+      max-idle-time: 30m
+      max-size: 40
+      initial-size: 20
+
+  # kafka admin config
+  kafka:
+    admin:
+      properties:
+        bootstrap.servers: 10.197.50.78:19092
+
+kafka-consumer-config:
+  bootstrap-servers: 10.197.50.78:19092
+  key-deserializer: org.apache.kafka.common.serialization.LongDeserializer
+  value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  client-id: "afaja-e-cash-wallet-transaction-servive-consumer"
+  group-id: "afaja-e-cash-wallet-transaction-servive"
+  auto-offset-reset: "latest"
+  transaction-va-topic: "transaction-va"
+  va-transaction-topic: "va-transaction"
+  client-code: "afaja-e-cash-wallet"
+kafka-producer-config:
+  bootstrap-servers: 10.197.50.78:19092
+  key-serializer: org.apache.kafka.common.serialization.LongSerializer
+  value-serializer: org.apache.kafka.common.serialization.StringSerializer
+  client-id: "afaja-e-cash-wallet-transaction-servive-producer"
+  va-transaction-topic: "va-transaction"
+  transaction-va-topic: "transaction-va"
+  acks: "all"
+
+jasypt:
+  encryptor:
+    password: ${JASYPT_ENCRYPTOR_PASSWORD}
+
+server:
+  port: 9093
