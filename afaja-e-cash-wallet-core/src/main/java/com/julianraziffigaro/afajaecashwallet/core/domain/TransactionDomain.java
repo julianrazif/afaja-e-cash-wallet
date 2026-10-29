@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,7 +16,7 @@ public class TransactionDomain implements BaseDomain {
 
   private Long trxId;
   private VaDomain issuedBy;
-  private Date issuedDate;
+  private String issuedDate;
   private TransactionType transactionType;
   private BigDecimal amount;
   private String hashedCode;

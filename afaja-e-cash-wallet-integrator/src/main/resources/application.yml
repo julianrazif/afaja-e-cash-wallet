@@ -20,6 +20,22 @@ db-postgres:
   password: ENC(3HxSvAhngYaiOyd8085/XzO3OSTcYXSARjDSmSmeAa1ZV/PBfERL0k/ki5s2VnlY)
   schema: ENC(ZN/yLWoNKUJ0RGbwhAKHWNgybzsdH6TTc25+y1DkwgyU+kHk+9AHvcXX5q1nrlKB)
 
+kafka-consumer-config:
+  bootstrap-servers: 10.197.50.78:19092
+  key-deserializer: org.apache.kafka.common.serialization.LongDeserializer
+  value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  client-id: "afaja-e-cash-wallet-va-servive-consumer"
+  group-id: "afaja-e-cash-wallet-va-servive"
+  auto-offset-reset: "latest"
+  transaction-va-topic: "transaction-va"
+  client-code: "afaja-e-cash-wallet-va-servive"
+kafka-producer-config:
+  bootstrap-servers: 10.197.50.78:19092
+  key-serializer: org.apache.kafka.common.serialization.LongSerializer
+  value-serializer: org.apache.kafka.common.serialization.StringSerializer
+  client-id: "afaja-e-cash-wallet-va-servive-producer"
+  acks: "all"
+
 server:
   port: 9091
 

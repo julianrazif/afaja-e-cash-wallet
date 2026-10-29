@@ -1,6 +1,9 @@
 package com.julianraziffigaro.afajaecashwallet.va.service;
 
+import com.julianraziffigaro.afajaecashwallet.core.domain.TransactionDomain;
 import com.julianraziffigaro.afajaecashwallet.core.domain.VaDomain;
+import com.julianraziffigaro.afajaecashwallet.core.model.TransactionType;
+import com.julianraziffigaro.afajaecashwallet.core.model.Va;
 import com.julianraziffigaro.afajaecashwallet.core.model.VaDetails;
 import com.julianraziffigaro.afajaecashwallet.core.service.VaService;
 import com.julianraziffigaro.afajaecashwallet.va.repository.VaRepositoryImpl;
@@ -20,14 +23,44 @@ public class VaServiceImpl implements VaService {
 
   @Override
   public Optional<VaDetails> save(VaDomain vaDomain) {
-    return this.vaRepository.save(
-      vaDomain.getVaNumber(),
-      vaDomain.getParentVa(),
-      vaDomain.getRealName(),
-      vaDomain.getPhoneNumber(),
-      vaDomain.getCurrentBalance(),
-      vaDomain.getHashedCode()
-    ).findFirst();
+    VaDetails vaDetails = inquiry(vaDomain).orElse(null);
+
+    if (vaDetails != null) {
+      return Optional.empty();
+    }
+
+    return this.vaRepository
+      .save(
+        vaDomain.getVaNumber(),
+        vaDomain.getParentVa(),
+        vaDomain.getRealName(),
+        vaDomain.getPhoneNumber(),
+        vaDomain.getCurrentBalance(),
+        vaDomain.getHashedCode()
+      ).flatMap(vaNumber -> this.vaRepository.findByVaNumber(vaNumber).findFirst());
+  }
+
+  @Override
+  public Optional<VaDetails> debitCredit(TransactionDomain transactionDomain) {
+    VaDetails vaDetails = inquiry(transactionDomain.getIssuedBy()).orElse(null);
+
+    if (vaDetails == null) {
+      return Optional.empty();
+    }
+
+    VaDetails va;
+
+    if (transactionDomain.getTransactionType().equals(TransactionType.DEBIT)) {
+      va = Va.withVaDetails(vaDetails).withDebit(transactionDomain.getAmount()).build();
+    } else if (transactionDomain.getTransactionType().equals(TransactionType.CREDIT)) {
+      va = Va.withVaDetails(vaDetails).withCredit(transactionDomain.getAmount()).build();
+    } else {
+      return Optional.empty();
+    }
+
+    return this.vaRepository
+      .debitCredit(va.getVaNumber(), va.getCurrentBalance())
+      .flatMap(vaNumber -> this.vaRepository.findByVaNumber(vaNumber).findFirst());
   }
 
   @Override

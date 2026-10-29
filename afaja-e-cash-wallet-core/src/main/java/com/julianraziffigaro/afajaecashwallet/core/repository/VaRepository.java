@@ -3,6 +3,7 @@ package com.julianraziffigaro.afajaecashwallet.core.repository;
 import com.julianraziffigaro.afajaecashwallet.core.model.VaDetails;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 public interface VaRepository {
@@ -13,6 +14,8 @@ public interface VaRepository {
 
   Stream<VaDetails> findByPhoneNumber(String phoneNumber);
 
-  Stream<VaDetails> save(String vaNumber, String parentVa, String realName, String phoneNumber,
-                         BigDecimal currentBalance, String hashedCode);
+  Optional<String> save(String vaNumber, String parentVa, String realName, String phoneNumber,
+                BigDecimal currentBalance, String hashedCode);
+
+  Optional<String> debitCredit(String vaNumber, BigDecimal amount);
 }
